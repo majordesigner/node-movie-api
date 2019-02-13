@@ -116,4 +116,32 @@ router.get('/:director_id', (req, res) => {
   });  
 });
 
+// Yönetmen güncelleme
+router.put('/:director_id', (req, res, next) => {
+  const promise = Director.findByIdAndUpdate(
+    req.params.director_id,
+    req.body,
+    {
+      new: true
+    }
+  );
+
+  promise.then((director) => {
+    res.json(director);
+  }).catch((err) => {
+    res.json(err);
+  }); 
+});
+
+// Yönetmen silme işlemi
+router.delete('/:director_id', (req, res, next) => {
+  const promise = Director.findByIdAndRemove(req.params.director_id);
+
+  promise.then((director) => {
+    res.json(director);
+  }).catch((err) => {
+    res.json(err);
+  });
+});
+
 module.exports = router;
