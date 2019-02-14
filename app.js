@@ -21,6 +21,11 @@ app.set('api_secret_key', config.api_secret_key);
 // Middleware
 const verifyToken = require('./middleware/verify-token');
 
+
+// Localstorage
+const LocalStorage = require('node-localstorage').LocalStorage;
+const localStorage = new LocalStorage('./scratch');
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -30,6 +35,14 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use((req, res, next) => {
+  // Kullanıcı doğrulaması yapılıp token oluştuysa ve localstorage'a yazıldıysa ordan alıp header'a yazıyoruz.
+  if(localStorage.getItem('token') !== null)
+    req.headers.authorization =  'Bearer ' + localStorage.getItem('token'); 
+
+  next();
+});
 
 app.use('/', indexRouter);
 app.use('/api', verifyToken);

@@ -1,0 +1,11 @@
+extends layout
+
+block content
+  h1= title
+  p This page is register page
+  p #{token}
+
+  form(name="register", method="post" action="/authenticate")
+    input(type="text", placeholder="Username", name="username")
+    input(type="password", placeholder="Password", name="password")
+    input(type="submit", value="Log In")
